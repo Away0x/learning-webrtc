@@ -1,0 +1,27 @@
+<div data-controller="demorecord">
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->demorecord#record">
+      开始录制
+    </button>
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->demorecord#play">
+      播放录制的内容
+    </button>
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->demorecord#download">
+      下载录制的视频
+    </button>
+    <div class="px-4 py-6 flex justify-around">
+      <div class="border-4 border-dashed border-gray-200 rounded-lg min-h-96 p-1 mb-5 ">
+        <video width="300" data-demorecord-target="video" autoplay playsinline></video>
+      </div>
+      <div>
+        <h6 class="max-w-20" data-demorecord-target="time">0</h6>
+      </div>
+      <div class="border-4 border-dashed border-gray-200 rounded-lg min-h-96 p-1 mb-5">
+        <video width="300" data-demorecord-target="playvideo"></video>
+      </div>
+    </div>
+  </div>
+</div>

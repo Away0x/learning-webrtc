@@ -1,0 +1,14 @@
+<% content_for :head do %>
+  <%= javascript_pack_tag 'react-application' %>
+  <%= render 'shared/preload_data' %>
+  <%= yield(:head) %>
+<% end %>
+
+<% content_for :body do %>
+  <%= yield %>
+  <div id="root">
+    <%= render 'shared/loading' %>
+  </div>
+<% end %>
+
+<%= render template: 'layouts/base' %>

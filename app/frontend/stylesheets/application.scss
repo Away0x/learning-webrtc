@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "components/loading";
+
+html, body, #root {
+  height: 100%;
+  position: relative;
+}
+
+.g-container {
+  @apply h-full min-h-full;
+}
+
+.g-bg {
+  &::before {
+    position: absolute;
+    content: '';
+    background: url('~images/index-background.png') no-repeat center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -2;
+  }
+}

@@ -1,0 +1,35 @@
+
+
+<div data-controller="democollect">
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->democollect#collect">
+      采集音视频
+    </button>
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->democollect#picture">
+      抓拍
+    </button>
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->democollect#savePicture">
+      保存抓拍的图片
+    </button>
+    <select class="float-right" data-democollect-target="filters">
+      <option value="none">设置抓拍滤镜</option>
+      <option value="blur">blur</option>
+      <option value="grayscale">Grayscale</option>
+      <option value="invert">Invert</option>
+      <option value="sepia">sepia</option>
+    </select>
+    <div class="px-4 py-6 sm:px-0">
+      <div class="border-4 border-dashed border-gray-200 rounded-lg min-h-96 p-1 mb-5">
+        <h6 class="p-2">设备列表</h6>
+        <ul data-democollect-target="list" class="p-1 text-gray-400 text-sm"></ul>
+      </div>
+      <div class="border-4 border-dashed border-gray-200 rounded-lg min-h-96 p-1 mb-5 flex justify-between">
+        <video width="300" data-democollect-target="video" autoplay playsinline></video>
+        <canvas width="300" data-democollect-target="picture"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
