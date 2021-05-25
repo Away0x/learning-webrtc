@@ -11,6 +11,7 @@ interface InitOptions {
   back_event: (history: string[]) => void; // 撤销时触发
   zoom_change: (zoom: number) => void;     // 缩放事件
   drag_event: (status: boolean) => void;   // 拖拽事件
+  on_draw: (data: any) => void; // 绘图过程
 }
 
 interface MousePosInfo {
@@ -122,6 +123,7 @@ export default class {
   private back_event: (history: string[]) => void;
   private zoom_change: (zoom: number) => void;
   private drag_event: (status: boolean) => void;
+  private on_draw: (data: any) => void;
   /** 自定义绘制 */
   private custom_draw_store: CustomDrawFunc[] = [];
 
@@ -169,6 +171,9 @@ export default class {
     }
     if (options.drag_event) {
       this.drag_event = options.drag_event;
+    }
+    if (options.on_draw) {
+      this.on_draw = options.on_draw;
     }
   }
 
@@ -430,6 +435,13 @@ export default class {
     });
   }
 
+  public draw_state(data: any) {
+    console.log('draw_state', data)
+    this.fCanvas.loadFromJSON(data, () => {
+      this.fCanvas.renderAll();
+    });
+  }
+
   /** img to base64 */
   public to_img(zoom?: number) {
     // 还原缩放和移动位置
@@ -518,7 +530,10 @@ export default class {
   private save_state() {
     const state = this.fCanvas.toJSON();
 
-    this.history.push(state);
+    // this.history.push(state);
+    if (this.on_draw) {
+      this.on_draw(state)
+    }
   }
 
   /** 绘制方法 - mouse move */

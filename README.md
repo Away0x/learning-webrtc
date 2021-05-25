@@ -1,8 +1,3 @@
-# Credentials
-```bash
-EDITOR=vim bin/rails credentials:edit -e production
-```
-
 # Development
 ```bash
 gem install foreman

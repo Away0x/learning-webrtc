@@ -10,6 +10,10 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 
+    <% if logged_in? %>
+      <meta name='user-id' content='<%= Current.user.id %>'>
+    <% end %>
+
     <%= yield(:head) %>
   </head>
 
