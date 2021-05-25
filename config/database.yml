@@ -5,9 +5,7 @@ default: &default
 
 development:
   <<: *default
-  host: postgres
-  username: wutong
-  database: rpcdemo_development
+  url: <%= ENV["DATABASE_URL"] %>
 
 test:
   <<: *default

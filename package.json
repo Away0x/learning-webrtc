@@ -18,6 +18,7 @@
     "antd": "^4.15.6",
     "axios": "^0.21.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "fabric-pure-browser": "^4.5.0",
     "qs": "^6.10.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",

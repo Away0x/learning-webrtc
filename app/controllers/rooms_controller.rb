@@ -1,4 +1,5 @@
 class RoomsController < ApplicationController
+  layout 'react', only: [:show]
 
   def index
     @rooms = Room.all
@@ -17,6 +18,9 @@ class RoomsController < ApplicationController
         errors: @room.errors.full_messages.join(',')
       }
     end
+  end
+
+  def show
   end
 
   private

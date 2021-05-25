@@ -3,19 +3,20 @@ import { Controller } from 'stimulus';
 const W: any = window;
 
 export default class extends Controller {
-  static targets = ['video', 'playvideo', 'time'];
+  static targets = ['recordBtn', 'video', 'playvideo', 'time'];
 
   private buffer: Blob[] = []; // 保存录制的数据
   private stream: MediaStream | null = null;
   private mediaRecorder: any = null // 客户端录制
 
+  private _getRecordBtnTarget(): HTMLButtonElement { return (this as any).recordBtnTarget }
   private _getVideoTarget(): HTMLVideoElement { return (this as any).videoTarget }
   private _getPlayVideoTarget(): HTMLVideoElement { return (this as any).playvideoTarget }
   private _getTimearget(): HTMLSpanElement { return (this as any).timeTarget }
 
   connect() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-      console.log("enumerateDevices() not supported.");
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.log("getUserMedia not supported.");
       return;
     }
 
@@ -31,10 +32,8 @@ export default class extends Controller {
   record(ev: any) {
     if (ev.target.textContent.trim() === '开始录制') {
       this.startRecord()
-      ev.target.textContent = '暂停录制'
     } else {
       this.stopRecord()
-      ev.target.textContent = '开始录制'
     }
   }
 
@@ -45,6 +44,9 @@ export default class extends Controller {
     this._getPlayVideoTarget().srcObject = null;
     this._getPlayVideoTarget().controls = true;
     this._getPlayVideoTarget().play();
+
+    // 暂停录制
+    this.stopRecord()
   }
 
   download() {
@@ -91,12 +93,15 @@ export default class extends Controller {
 
     // 开始录制
     this.mediaRecorder.start(10);
+
+    this._getRecordBtnTarget().textContent = '暂停录制'
   }
 
   // 暂停录制
   private stopRecord() {
     if (!this.mediaRecorder) return
     this.mediaRecorder.stop()
+    this._getRecordBtnTarget().textContent = '开始录制'
   }
 
 }

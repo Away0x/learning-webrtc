@@ -1254,6 +1254,11 @@
     lodash.merge "^4.6.2"
     lodash.uniq "^4.5.0"
 
+"@types/fabric@^4.2.6":
+  version "4.2.6"
+  resolved "https://registry.nlark.com/@types/fabric/download/@types/fabric-4.2.6.tgz#bbcb3f2d9d12a55acf0712d2f7c4d493a29225d6"
+  integrity sha1-u8s/LZ0SpVrPBxLS98TUk6KSJdY=
+
 "@types/glob@^7.1.1":
   version "7.1.3"
   resolved "https://registry.nlark.com/@types/glob/download/@types/glob-7.1.3.tgz#e6ba80f36b7daad2c685acd9266382e68985c183"
@@ -3301,6 +3306,11 @@ extglob@^2.0.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+fabric-pure-browser@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.nlark.com/fabric-pure-browser/download/fabric-pure-browser-4.5.0.tgz#2475dfc73b25de6a1b099bdedf48a9e134044c86"
+  integrity sha1-JHXfxzsl3mobCZve30ip4TQETIY=
 
 fast-deep-equal@^3.1.1:
   version "3.1.3"

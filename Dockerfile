@@ -3,8 +3,8 @@ FROM ruby:2.7.2-alpine
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL C.UTF-8
-ENV RAILS_ENV production
-ENV NODE_ENV production
+# ENV RAILS_ENV production
+# ENV NODE_ENV production
 
 RUN apk add --no-cache \
   tzdata \
@@ -18,7 +18,7 @@ WORKDIR /app
 ADD . /app
 
 RUN apk add --no-cache --virtual .build-deps build-base \
-  && bundle install --without development test \
+  && bundle install --without test \
   && rm -rf /usr/local/bundle/cache/*.gem \
   && apk del --no-network .build-deps
 

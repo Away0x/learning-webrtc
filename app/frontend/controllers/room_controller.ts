@@ -11,9 +11,9 @@ export default class extends Controller {
   }
 
   join(ev: any) {
-    const roomid = Number(ev.target.getAttribute('data-roomid'))
-    if (!roomid) return;
+    const url =ev.target.getAttribute('data-roomurl')
+    if (!url) return;
 
-    alert(`join ${roomid}`)
+    window.location.href = url
   }
 }

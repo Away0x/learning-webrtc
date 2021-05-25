@@ -1,0 +1,8 @@
+<% content_for :head do %>
+  <%= javascript_pack_tag 'room' %>
+<% end %>
+
+
+<div class="fixed top-0 right-0 z-10">
+  <%= link_to 'Logout', session_path, method: :delete, class: 'block px-4 py-2 text-sm text-black' %>
+</div>
