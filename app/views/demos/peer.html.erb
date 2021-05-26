@@ -1,0 +1,37 @@
+<style>
+  button:disabled {
+    color: #c1bfbf;
+    cursor: not-allowed;
+  }
+</style>
+
+<div data-controller="demopeer">
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->demopeer#start" data-demopeer-target="startBtn">
+      Start
+    </button>
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->demopeer#call" data-demopeer-target="callBtn">
+      Call
+    </button>
+    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      data-action="click->demopeer#hangUp" data-demopeer-target="hangupBtn">
+      Hang Up
+    </button>
+    <select class="float-right" data-demopeer-target="type" data-action="change->demopeer#changeType">
+      <option value="camera">Camera</option>
+      <option value="desktop">Desktop</option>
+    </select>
+    <div class="px-4 py-6">
+      <div class="border-4 border-dashed border-gray-200 rounded-lg min-h-96 p-1 mb-5 ">
+        <h4>LOCAL</h4>
+        <video data-demopeer-target="localVideo" autoplay playsinline></video>
+      </div>
+      <div class="border-4 border-dashed border-gray-200 rounded-lg min-h-96 p-1 mb-5">
+        <h4>REMOTE</h4>
+        <video data-demopeer-target="remoteVideo" autoplay playsinline></video>
+      </div>
+    </div>
+  </div>
+</div>

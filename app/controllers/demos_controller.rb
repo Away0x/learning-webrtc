@@ -4,6 +4,7 @@ class DemosController < ApplicationController
       {name: 'WebRTC 音视频采集', link: demos_collect_path },
       {name: 'WebRTC 音视频录制', link: demos_record_path },
       {name: 'WebRTC 共享桌面', link: demos_desktop_path },
+      {name: 'WebRTC RTCPeerConnection', link: demos_peer_path },
       {name: 'WebSocket', link: demos_cable_path },
     ]
   end
@@ -13,4 +14,6 @@ class DemosController < ApplicationController
   def record; end
 
   def cable; end
+
+  def peer; end
 end

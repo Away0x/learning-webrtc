@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get '/demos/collect', to: 'demos#collect'
   get '/demos/record', to: 'demos#record'
   get '/demos/desktop', to: 'demos#desktop'
+  get '/demos/peer', to: 'demos#peer'
   get '/demos/cable', to: 'demos#cable'
 
 end

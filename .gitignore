@@ -39,3 +39,4 @@ yarn-debug.log*
 /docker/postgres
 /docker/redis
 .DS_Store
+/.env

@@ -27,7 +27,3 @@ RUN bundle exec rails assets:precompile SECRET_KEY_BASE=fake_secure_for_compile 
   && rm -rf node_modules tmp/cache/* /tmp/*
 
 RUN cp docker/nginx/default.conf /etc/nginx/nginx.conf
-
-EXPOSE 3000
-
-CMD ["docker/production_start.sh"]
