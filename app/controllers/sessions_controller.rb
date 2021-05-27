@@ -16,10 +16,7 @@ class SessionsController < ApplicationController
 
       render json: {
         success: true,
-        data: {
-          id: user.id,
-          username: user.username
-        }
+        data: { id: user.id, username: user.username }
       }
     else
       render json: {

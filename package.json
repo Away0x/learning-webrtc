@@ -1,5 +1,5 @@
 {
-  "name": "rpcdemo",
+  "name": "rtcdemo",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.6.2",

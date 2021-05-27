@@ -14,9 +14,7 @@ class UsersController < ApplicationController
     @user = User.new user_params
 
     if @user.save
-      render json: {
-        success: true
-      }
+      render json: { success: true }
     else
       render json: {
         success: false,

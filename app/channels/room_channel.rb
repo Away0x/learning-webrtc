@@ -10,9 +10,7 @@ class RoomChannel < ApplicationCable::Channel
       @current_room.anchor = current_user
       @current_room.save
 
-      ActionCable.server.broadcast current_channel,
-        type: 'get_room_info',
-        room: room_data
+      ActionCable.server.broadcast current_channel, type: 'get_room_info', room: room_data
     end
 
     ActionCable.server.broadcast current_channel,
@@ -28,9 +26,7 @@ class RoomChannel < ApplicationCable::Channel
       @current_room.anchor = nil
       @current_room.save
 
-      ActionCable.server.broadcast current_channel,
-        type: 'get_room_info',
-        room: room_data
+      ActionCable.server.broadcast current_channel, type: 'get_room_info', room: room_data
     end
 
     ActionCable.server.broadcast current_channel,
@@ -49,9 +45,7 @@ class RoomChannel < ApplicationCable::Channel
         message: data['message']
     # 同步白板
     when 'draw'
-      ActionCable.server.broadcast current_channel,
-        type: 'draw',
-        message: data['message']
+      ActionCable.server.broadcast current_channel, type: 'draw', message: data['message']
     # RTC 信令转发
     when 'offer', 'answer', 'candidate'
       ActionCable.server.broadcast current_channel, data
@@ -60,9 +54,7 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def get_room_info
-    ActionCable.server.broadcast current_user_channel,
-      type: 'get_room_info',
-      room: room_data
+    ActionCable.server.broadcast current_user_channel, type: 'get_room_info', room: room_data
   end
 
   private

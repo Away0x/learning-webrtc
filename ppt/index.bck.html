@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Hello TypeScript</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<style>
+			.md_small li {
+				font-size: 20px;
+				margin-bottom: 1em;
+				line-height: 2em;
+			}
+			.md_small li li {
+				font-size: 16px;
+				margin-bottom: 1em;
+				line-height: 1em;
+			}
+			.md_small code {
+				font-size: 14px;
+				line-height: 1em;
+			}
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-markdown class="md_small">
+				# Hello WebRTC
+				</section>
+
+				<section data-markdown class="md_small">
+				### 目录
+
+				1. [为什么需要TypeScript](#/2)
+				2. [TypeScript 入门](#/3)
+				3. [TypeScript 遇见 Vue](#/4)
+				</section>
+
+				<section data-transition="zoom">
+					<section data-markdown class="md_small">
+					##### 一、为什么需要静态类型
+					</section>
+
+					<section data-markdown class="md_small">
+					1. 可读性
+						1. 无需代码注释说明类型，且调用方可根据编辑器提示得知类型
+					2. 类型安全
+						1. 由于已预约束变量类型，所以类型不匹配会导致**编译报错** (注意: 非运行时错误)
+					3. 利于重构
+						1. 修改可能会导致相关联代码在编译期即报错，而不是不易查的运行时报错
+						2. 例: 后端修改响应数据，修改前端的 interface 数据类型即可
+					4. 强大的 IDE 支持
+					</section>
+
+					<section data-markdown class="md_small">
+					```TypeScript
+					/**
+					 * add
+					 */
+					function add(a: number, b: number): number {
+						return a + b
+					}
+
+					/**
+					 * add
+					 *
+					 * param [Number] a
+					 * param [Number] b
+					 * return Number
+					 */
+					function add(a, b) {
+						if ( ! is_number(a)) return 0
+						if ( ! is_number(b)) return 0
+
+						return a + b
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					```TypeScript
+					/* 描述响应通用类型 */
+					// { cur: 1, total: 10, line: 4 }
+					interface ResponsePageDataType {
+						cur: number
+						total: number
+						line: number
+					}
+					// { code: 200, page: ResponsePageDataType, data: any }
+					interface ResponseDataType {
+						code: number
+						page?: ResponsePageDataType
+						data: any // 可能是 undefined Array 或者 具体的类型
+					}
+
+					/* 具体接口的数据 */
+					// { name: 'wt', age: 26, phone: 123456 }
+					interface ResponseUserInfoDataType {
+						name: string
+						age: number
+						phone: number
+						email?: string
+					}
+
+					/* 使用 */
+					ajax('http://api.example.com/userinfo?id=1', (result: ResponseDataType) => {
+						// <ResponseUserInfoDataType>result.data
+						const data: ResponseUserInfoDataType = result.data
+
+						console.log(data.name)
+					})
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 二、为什么需要预编译语言
+					</section>
+
+					<section data-markdown class="md_small">
+					1. 浏览器兼容性
+					2. 预先使用未敲定的语法和特性
+					3. 享受 JavaScript 所不具备的语法和特性
+					</section>
+
+					<section data-markdown>
+					##### 三、预编译语言方案
+					</section>
+
+					<section data-markdown class="md_small">
+					1. CSS预编译方案: Less、Scss、Stylus
+					2. JavaScript 预编译方案:
+						1. Babel
+						2. [CoffeeScript](http://coffee-script.org/)
+						3. [Elm](http://elm-lang.org/)
+						4. [Flow](https://flow.org/)
+						5. [TypeScript](https://tslang.cn/index.html)
+					</section>
+				</section>
+
+				<section data-transition="zoom">
+					<section data-markdown class="md_small">
+					##### TypeScript 入门
+
+					[Playground](http://www.typescriptlang.org/play/index.html)
+
+					- TypeScript =
+						- 70% 的 JavaScript 语法 + 10% 的类型描述语法
+						- 10% 的特殊语法(接口、枚举、抽象类)
+						- 10% 基本用不到的边缘语法
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 基础概念
+
+					1. 编译时与运行时
+					2. 值类型和引用类型
+					3. 类型约束
+						- 只在编译时有效
+						- duck typing
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 编译时与运行时
+
+					1. 观察 [TypeScript Playground](http://www.typescriptlang.org/play/index.html)
+					2. 编译时
+						- ES6/7 或者可以用 JS 实现的语法翻译成 es5 或自行设置的版本
+						- 编译通过，则删除类型语法
+					3. 运行时
+						- 同 JavaScript
+						- 注意: 类型仍不安全
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 值类型和引用类型
+					</section>
+
+					<section data-markdown class="md_small">
+					##### duck typing
+
+					- TypeScript的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。
+					- 在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约
+					</section>
+
+					<section data-markdown class="md_small">
+					- python 的 duck typing
+						- 运行时才知道传入的对象是否有 get 方法，如无会报运行时错误
+						- 调用时需要看 download 方法的注释说明才知道对于传入参数的约束
+
+					```python
+					def download(http):
+						"""http 需要有 get 方法"""
+						http.get('http://a.com/1.png')
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					- c++ 的 duck typing
+						- 编译时才知道传入的对象是否有 get 方法，敲代码时，编辑器不会有提示
+						- 调用时需要看 download 方法的注释说明才知道对于传入参数的约束
+
+					```cpp
+					// 通过模板限制传入的类型
+					template 《class R》
+					string dowload(R r) {
+						return r.get('http://a.com/1.png');
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					- java 类似 duck typing 的语法
+						- 传入的参数必须显示实现(implements) Http 接口 (所以不需注释说明)
+						- 缺点: 不灵活，必须强制实现
+
+					```java
+					《R extends Http》
+					String download(R r) {
+						return r.get('http://a.com/1.png');
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					- go 的 duck typing
+						- 类似 TypeScript 的实现
+
+					```go
+					// 接口
+					type Http interface {
+						Get(string) string
+					}
+
+					// 结构
+					type MyHttp struct {}
+					func (h MyHttp)Get (url string) {
+						// ...
+					}
+
+					func download(h Http) {
+						h.get("http://a.com/1.png")
+					}
+
+					func main() {
+						var h Http
+						h = MyHttp
+
+						download(h)
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### TypeScript 的 duck typing
+
+					```TypeScript
+					// 接口
+					interface Http {
+						get(url: string): void;
+					}
+
+					// 类
+					class MyHttp1 {
+						public static get(url: string) {
+							// ...
+						}
+					}
+					const MyHttp2 = {
+						get(url: string) {}
+					}
+
+					function download(h: Http) {
+						h.get('http://a.com/1.png')
+					}
+
+					download(MyHttp1)
+					download(MyHttp2)
+					```
+
+					1. 可见 TypeScript 的类型系统只是描述成员结构，而并不需要显示声明实现 (java 那样)
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 类型约束
+
+					1. TypeScript 的类型系统只是描述成员结构，而并不需要显示声明实现 (java 那样)
+					2. TypeScript 只在编译期生效，编译成 JavaScript 代码后，类型约束会被删除
+						- 这点和 python3.7 很像，解释器不解释类型语法，类型语法由编辑器或第三方模块解析
+					3. 运行期是运行的是编译后的 JavaScript 代码，与 TypeScript 无关
+						- 所以，即使 TypeScript 编译成功，运行时仍可能有类型错误
+						- 也有些手法可绕过 TypeScript 的类型检查导致运行时 JavaScript 代码类型报错 (any ? ! as <> obj['key'] ...)
+
+					1. 类型声明、类型推断、interface、class
+					1. 联合类型: |
+					2. 类型推断: ? !
+					3. 类型断言: as <>
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 变量声明
+
+					块作用域、无死区、无提升
+
+					const: 只是限制赋值，并不是不可变
+
+					```TypeScript
+					let something
+					const something
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 类
+
+					```TypeScript
+					class Demo {
+						// 实例变量
+						public name: string
+						private _age: number
+
+						// 类变量
+						public static xxx: string
+
+						// 构造方法
+						constructor(name: string = 'wt') {
+							this.name = name
+						}
+
+						// 实例方法
+						public run() {
+							console.log(this.name, ' running ... ...')
+						}
+
+						// getter/setter
+						public get age() {
+							return this._age
+						}
+						public set age(the_age: number) {
+							this._age = the_age
+						}
+
+						// 类方法
+						public static xxx_xxx() {}
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### interface & abstract class
+
+					我们在 ts 中只用其来描述数据结构
+
+					```TypeScript
+					interface Data {
+						color?: string
+						width: number
+						height: number
+					}
+
+					function test(params: Data) {
+						console.log(params.width * params.height)
+					}
+
+					ajax(url, (result: Data[]) => {
+						result.forEach(test)
+					})
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 泛型
+
+					泛型是静态类型的通用性解决方案
+
+					```TypeScript
+					// 用于声明类型
+					// const arr: Array《MyObj》 = [obj1, obj2, obj3]
+					const arr1: MyObj[] = [obj1, obj2, obj3]
+
+					// 用于约束类型
+					function fun1(a: number[]) { console.log(a.length) }
+					function fun2(a: string[]) { console.log(a.length) }
+
+					// 1. 使用联合类型
+					function fun3(a: string[] | number[]) { console.log(a.length) }
+
+					// 2. 使用泛型 (更容易拓展)
+					function fun4《T extends {length: number}》(a: T[]) { console.log(a.length) }
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 枚举
+
+					```TypeScript
+					enum Direction {
+						Up = 1,
+						Down,
+						Left,
+						Right
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 其他
+
+					1. 装饰器
+					2. ReadOnlyArray
+					3. 抽象类
+					4. xx.d.ts
+					5. ... ...
+					</section>
+
+				</section>
+
+				<section data-transition="fade">
+					<section data-markdown class="md_small">
+					##### TypeScript 遇见 Vue
+
+					1. [vue-class-component](https://github.com/vuejs/vue-class-component)
+					2. [vue-property-decorator](https://github.com/kaorun343/vue-property-decorator)
+					3. [vuex-class](https://github.com/ktsn/vuex-class)
+					</section>
+
+					<section data-markdown class="md_small">
+					##### 写法
+
+					```TypeScript
+					import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator';
+					import { Getter, Action } from 'vuex-class';
+
+
+					@Component({
+						name: 'test',
+						components: {},
+					})
+					export default class Test extends Vue {
+						/* ------------------------ INPUT & OUTPUT ------------------------ */
+						@Prop() private parentData!: any;
+						@Emit('event_name') private handler() {}
+
+						/* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
+						@Getter private some_getter!: any;
+						@Action private some_action!: () => void;
+
+						/* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
+						private created() {}
+						private mounted() {}
+
+						/* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
+						private my_data: string = 'some thing'; // data
+						get computed_data(): string { return 'computed' } // computed
+
+						/* ------------------------ WATCH ------------------------ */
+						@Watch('some_thing') private some_thing_changed(val: any, oldVal: any) {}
+
+						/* ------------------------ METHODS ------------------------ */
+						private some_method(): void {}
+
+					}
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					##### vue+typescript 中的注意点
+
+					1. TypeScript 和 Vue 的类型系统是两套不同的系统
+						1. TypeScript: 编译器类型约束
+						2. Vue: 运行期类型约束
+						3. 所以二者都需声明
+					2. 目前 vue(尤其是 vuex 和模板) 对于 TypeScript 的支持并不好
+					</section>
+
+					<section data-markdown class="md_small">
+					- @Prop 中的类型描述是针对 Vue 运行时的约束，所以虽然和 TypeScript 的描述冲突，也得写两遍
+					- props 的数据是父组件注入的，所以不需要初始化，但是使用中已确定有值，所以变量名加上 `!` 以绕过 TypeScript 编译器
+
+					```TypeScript
+					@Prop({
+						type: Array,
+						default () { return [] }
+					}) private parentData!: string[];
+					```
+					</section>
+
+					<section data-markdown class="md_small">
+					- @Emit 我们为了语义更明确，不实现方法体，只用来描述事件
+
+					```TypeScript
+					@Emit('click-the-component') private handler(id: number) {}
+
+					private do() {
+						this.handler(this.id)
+					}
+					```
+					</section>
+
+
+				</section>
+
+				<section data-markdown class="md_small">
+				谢谢 😘
+
+				- [Away0x](https://github.com/Away0x)
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+			// document.getElementById('theme').setAttribute('href','css/theme/moon.css')
+
+		</script>
+
+	</body>
+</html>

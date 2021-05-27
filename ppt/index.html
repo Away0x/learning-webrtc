@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Hello TypeScript</title>
+		<title>Hello WebRTC</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -29,16 +29,27 @@
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
 
-		<style>		
-			.md_small li {
+		<style>
+			.md_small li, .md_small p {
 				font-size: 20px;
+				margin-bottom: 1em;
+				line-height: 2em;
+        text-align: left;
+			}
+      .md_small h3 {
+				font-size: 30px;
+				margin-bottom: 1em;
+				line-height: 2em;
+			}
+      .md_small h4 {
+				font-size: 24px;
 				margin-bottom: 1em;
 				line-height: 2em;
 			}
 			.md_small li li {
 				font-size: 16px;
 				margin-bottom: 1em;
-				line-height: 1em;
+				line-height: 1.2em;
 			}
 			.md_small code {
 				font-size: 14px;
@@ -58,484 +69,380 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section data-markdown class="md_small">
-				# Hello TypeScript
+				# Hello WebRTC
 				</section>
 
 				<section data-markdown class="md_small">
 				### 目录
 
-				1. [为什么需要TypeScript](#/2)
-				2. [TypeScript 入门](#/3)
-				3. [TypeScript 遇见 Vue](#/4)
+				1. [使用 Agora 开发直播应用](#/2)
+				2. [RTM](#/3)
+				3. [RTC](#/4)
+				4. [学习 WebRTC 需要了解的一些概念](#/5)
+				5. [WebRTC 中比较重要的 API](#/6)
+				6. [WebRTC Examples](#/7)
+				7. [结合 RTM & RTM 实现一对一音视频服务](#/8)
+
 				</section>
 
-				<section data-transition="zoom">
-					<section data-markdown class="md_small">
-					##### 一、为什么需要静态类型
-					</section>
-
-					<section data-markdown class="md_small">
-					1. 可读性
-						1. 无需代码注释说明类型，且调用方可根据编辑器提示得知类型
-					2. 类型安全
-						1. 由于已预约束变量类型，所以类型不匹配会导致**编译报错** (注意: 非运行时错误)
-					3. 利于重构
-						1. 修改可能会导致相关联代码在编译期即报错，而不是不易查的运行时报错
-						2. 例: 后端修改响应数据，修改前端的 interface 数据类型即可
-					4. 强大的 IDE 支持
-					</section>
-
-					<section data-markdown class="md_small">
-					```TypeScript
-					/**
-					 * add
-					 */
-					function add(a: number, b: number): number {
-						return a + b
-					}
-
-					/**
-					 * add
-					 *
-					 * param [Number] a
-					 * param [Number] b
-					 * return Number
-					 */
-					function add(a, b) {
-						if ( ! is_number(a)) return 0
-						if ( ! is_number(b)) return 0
-
-						return a + b
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					```TypeScript
-					/* 描述响应通用类型 */
-					// { cur: 1, total: 10, line: 4 }
-					interface ResponsePageDataType {
-						cur: number
-						total: number
-						line: number
-					}
-					// { code: 200, page: ResponsePageDataType, data: any }
-					interface ResponseDataType {
-						code: number
-						page?: ResponsePageDataType
-						data: any // 可能是 undefined Array 或者 具体的类型
-					}
-
-					/* 具体接口的数据 */
-					// { name: 'wt', age: 26, phone: 123456 }
-					interface ResponseUserInfoDataType {
-						name: string
-						age: number
-						phone: number
-						email?: string
-					}
-
-					/* 使用 */
-					ajax('http://api.example.com/userinfo?id=1', (result: ResponseDataType) => {
-						// <ResponseUserInfoDataType>result.data
-						const data: ResponseUserInfoDataType = result.data
-
-						console.log(data.name)
-					})
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 二、为什么需要预编译语言
-					</section>
-
-					<section data-markdown class="md_small">
-					1. 浏览器兼容性
-					2. 预先使用未敲定的语法和特性
-					3. 享受 JavaScript 所不具备的语法和特性
-					</section>
-
-					<section data-markdown>
-					##### 三、预编译语言方案
-					</section>
-
-					<section data-markdown class="md_small">
-					1. CSS预编译方案: Less、Scss、Stylus
-					2. JavaScript 预编译方案:
-						1. Babel
-						2. [CoffeeScript](http://coffee-script.org/)
-						3. [Elm](http://elm-lang.org/)
-						4. [Flow](https://flow.org/)
-						5. [TypeScript](https://tslang.cn/index.html)
-					</section>
-				</section>
-
-				<section data-transition="zoom">
-					<section data-markdown class="md_small">
-					##### TypeScript 入门
-
-					[Playground](http://www.typescriptlang.org/play/index.html)
-
-					- TypeScript = 
-						- 70% 的 JavaScript 语法 + 10% 的类型描述语法
-						- 10% 的特殊语法(接口、枚举、抽象类)
-						- 10% 基本用不到的边缘语法
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 基础概念
-
-					1. 编译时与运行时
-					2. 值类型和引用类型
-					3. 类型约束
-						- 只在编译时有效
-						- duck typing
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 编译时与运行时
-
-					1. 观察 [TypeScript Playground](http://www.typescriptlang.org/play/index.html)
-					2. 编译时
-						- ES6/7 或者可以用 JS 实现的语法翻译成 es5 或自行设置的版本
-						- 编译通过，则删除类型语法
-					3. 运行时
-						- 同 JavaScript
-						- 注意: 类型仍不安全
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 值类型和引用类型
-					</section>
-
-					<section data-markdown class="md_small">
-					##### duck typing
-
-					- TypeScript的核心原则之一是对值所具有的结构进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 
-					- 在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约
-					</section>
-
-					<section data-markdown class="md_small">
-					- python 的 duck typing
-						- 运行时才知道传入的对象是否有 get 方法，如无会报运行时错误
-						- 调用时需要看 download 方法的注释说明才知道对于传入参数的约束
-
-					```python
-					def download(http):
-						"""http 需要有 get 方法"""
-						http.get('http://a.com/1.png')
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					- c++ 的 duck typing
-						- 编译时才知道传入的对象是否有 get 方法，敲代码时，编辑器不会有提示
-						- 调用时需要看 download 方法的注释说明才知道对于传入参数的约束
-
-					```cpp
-					// 通过模板限制传入的类型
-					template 《class R》
-					string dowload(R r) {
-						return r.get('http://a.com/1.png');
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					- java 类似 duck typing 的语法
-						- 传入的参数必须显示实现(implements) Http 接口 (所以不需注释说明)
-						- 缺点: 不灵活，必须强制实现
-
-					```java
-					《R extends Http》
-					String download(R r) {
-						return r.get('http://a.com/1.png');
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					- go 的 duck typing
-						- 类似 TypeScript 的实现
-
-					```go
-					// 接口
-					type Http interface {
-						Get(string) string
-					}
-
-					// 结构
-					type MyHttp struct {}
-					func (h MyHttp)Get (url string) {
-						// ...
-					}
-
-					func download(h Http) {
-						h.get("http://a.com/1.png")
-					}
-
-					func main() {
-						var h Http
-						h = MyHttp
-
-						download(h)
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### TypeScript 的 duck typing
-
-					```TypeScript
-					// 接口
-					interface Http {
-						get(url: string): void;
-					}
-
-					// 类
-					class MyHttp1 {
-						public static get(url: string) {
-							// ...
-						}
-					}
-					const MyHttp2 = {
-						get(url: string) {}
-					}
-
-					function download(h: Http) {
-						h.get('http://a.com/1.png')
-					}
-
-					download(MyHttp1)
-					download(MyHttp2)
-					```
-
-					1. 可见 TypeScript 的类型系统只是描述成员结构，而并不需要显示声明实现 (java 那样)
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 类型约束
-
-					1. TypeScript 的类型系统只是描述成员结构，而并不需要显示声明实现 (java 那样)
-					2. TypeScript 只在编译期生效，编译成 JavaScript 代码后，类型约束会被删除
-						- 这点和 python3.7 很像，解释器不解释类型语法，类型语法由编辑器或第三方模块解析
-					3. 运行期是运行的是编译后的 JavaScript 代码，与 TypeScript 无关
-						- 所以，即使 TypeScript 编译成功，运行时仍可能有类型错误
-						- 也有些手法可绕过 TypeScript 的类型检查导致运行时 JavaScript 代码类型报错 (any ? ! as <> obj['key'] ...)
-					
-					1. 类型声明、类型推断、interface、class
-					1. 联合类型: |
-					2. 类型推断: ? !
-					3. 类型断言: as <>
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 变量声明
-
-					块作用域、无死区、无提升
-
-					const: 只是限制赋值，并不是不可变
-
-					```TypeScript
-					let something
-					const something
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 类
-
-					```TypeScript
-					class Demo {
-						// 实例变量
-						public name: string
-						private _age: number
-
-						// 类变量
-						public static xxx: string
-
-						// 构造方法
-						constructor(name: string = 'wt') {
-							this.name = name
-						}
-
-						// 实例方法
-						public run() {
-							console.log(this.name, ' running ... ...')
-						}
-						
-						// getter/setter
-						public get age() {
-							return this._age
-						}
-						public set age(the_age: number) {
-							this._age = the_age
-						}
-
-						// 类方法
-						public static xxx_xxx() {}
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### interface & abstract class
-
-					我们在 ts 中只用其来描述数据结构
-
-					```TypeScript
-					interface Data {
-						color?: string
-						width: number
-						height: number
-					}
-					
-					function test(params: Data) {
-						console.log(params.width * params.height)
-					}
-					
-					ajax(url, (result: Data[]) => {
-						result.forEach(test)
-					})
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 泛型
-
-					泛型是静态类型的通用性解决方案
-
-					```TypeScript
-					// 用于声明类型
-					// const arr: Array《MyObj》 = [obj1, obj2, obj3]
-					const arr1: MyObj[] = [obj1, obj2, obj3]
-
-					// 用于约束类型
-					function fun1(a: number[]) { console.log(a.length) }
-					function fun2(a: string[]) { console.log(a.length) }
-
-					// 1. 使用联合类型
-					function fun3(a: string[] | number[]) { console.log(a.length) }
-
-					// 2. 使用泛型 (更容易拓展)
-					function fun4《T extends {length: number}》(a: T[]) { console.log(a.length) }
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 枚举
-
-					```TypeScript
-					enum Direction {
-						Up = 1,
-						Down,
-						Left,
-						Right
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 其他
-
-					1. 装饰器
-					2. ReadOnlyArray
-					3. 抽象类
-					4. xx.d.ts
-					5. ... ...
-					</section>
-					
-				</section>
-
-				<section data-transition="fade">
-					<section data-markdown class="md_small">
-					##### TypeScript 遇见 Vue
-
-					1. [vue-class-component](https://github.com/vuejs/vue-class-component)
-					2. [vue-property-decorator](https://github.com/kaorun343/vue-property-decorator)
-					3. [vuex-class](https://github.com/ktsn/vuex-class)
-					</section>
-
-					<section data-markdown class="md_small">
-					##### 写法
-
-					```TypeScript
-					import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator';
-					import { Getter, Action } from 'vuex-class';
-					
-					
-					@Component({
-						name: 'test',
-						components: {},
-					})
-					export default class Test extends Vue {
-						/* ------------------------ INPUT & OUTPUT ------------------------ */
-						@Prop() private parentData!: any;
-						@Emit('event_name') private handler() {}
-					
-						/* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
-						@Getter private some_getter!: any;
-						@Action private some_action!: () => void;
-					
-						/* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
-						private created() {}
-						private mounted() {}
-					
-						/* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-						private my_data: string = 'some thing'; // data
-						get computed_data(): string { return 'computed' } // computed
-					
-						/* ------------------------ WATCH ------------------------ */
-						@Watch('some_thing') private some_thing_changed(val: any, oldVal: any) {}
-					
-						/* ------------------------ METHODS ------------------------ */
-						private some_method(): void {}
-					
-					}
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					##### vue+typescript 中的注意点
-
-					1. TypeScript 和 Vue 的类型系统是两套不同的系统
-						1. TypeScript: 编译器类型约束
-						2. Vue: 运行期类型约束
-						3. 所以二者都需声明
-					2. 目前 vue(尤其是 vuex 和模板) 对于 TypeScript 的支持并不好
-					</section>
-
-					<section data-markdown class="md_small">
-					- @Prop 中的类型描述是针对 Vue 运行时的约束，所以虽然和 TypeScript 的描述冲突，也得写两遍
-					- props 的数据是父组件注入的，所以不需要初始化，但是使用中已确定有值，所以变量名加上 `!` 以绕过 TypeScript 编译器
-
-					```TypeScript
-					@Prop({
-						type: Array,
-						default () { return [] }
-					}) private parentData!: string[];
-					```
-					</section>
-
-					<section data-markdown class="md_small">
-					- @Emit 我们为了语义更明确，不实现方法体，只用来描述事件
-
-					```TypeScript
-					@Emit('click-the-component') private handler(id: number) {}
-
-					private do() {
-						this.handler(this.id)
-					}
-					```
-					</section>
-
-
-				</section>
+        <!-- 2 使用 Agora 开发直播应用 -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ### 使用 Agora 开发直播应用 [(直播课堂案例)](https://solutions.agora.io/education/web_v2/#/)
+
+            ![demo](images/agora.jpg)
+            </section>
+        </section>
+
+        <!-- 3 RTM -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ## RTM (Real-Time Message)
+          </section>
+
+          <section data-markdown class="md_small">
+            #### 如何开发实时通信应用
+            - 长连接
+            - 短轮询
+            - SSE (Server Send Event)
+            - Flash
+            - WebSocket
+          </section>
+          <section data-markdown class="md_small">
+            ### WebSocket
+
+            WebSocket是一种在单个TCP连接上进行全双工通信的协议。WebSocket通信协议于2011年被IETF定为标准RFC 6455，并由RFC7936补充规范。WebSocket API也被W3C定为标准。
+
+            WebSocket使得客户端和服务器之间的数据交换变得更加简单，允许服务端主动向客户端推送数据。在WebSocket API中，浏览器和服务器只需要完成一次握手，两者之间就直接可以创建持久性的连接，并进行双向数据传输
+          </section>
+          <section data-markdown class="md_small">
+            ### [例子](http://localhost:3000/demos/cable)
+
+            服务端实现 (ActionCable)
+
+            ```ruby
+            # app/channels/application_cable/connection.rb
+
+            class Connection < ActionCable::Connection::Base
+              # 使用当前用户标示每一个连接
+              identified_by :current_user
+              # ...
+            end
+            ```
+            ```ruby
+            # app/channels/demo_channel.rb
+
+            class DemoChannel < ApplicationCable::Channel
+              def subscribed
+                # 订阅频道
+                stream_from "demo::#{current_user}"
+              end
+
+              # 接收到频道广播
+              def receive(data)
+                ActionCable.server.broadcast "demo::#{current_user}",
+                  client: data,
+                  server: { text: 'DemoChannel 广播的消息' }
+              end
+
+              # 自定义方法
+              def echo
+                ActionCable.server.broadcast "demo::#{current_user}",
+                  server: { text: '调用了服务端的 echo 方法' }
+              end
+            end
+            ```
+          </section>
+          <section data-markdown class="md_small">
+            - 客户端实现:
+              1. app/views/demos/cable.html.erb
+              2. app/frontend/controllers/democable_controller.ts
+
+            ```typescript
+            // 建立连接 & 事件回调
+            this.channel = cable.subscriptions.create('DemoChannel', {
+              connected: () => {
+                console.log('Demo channel connected')
+              },
+              disconnected: () => {
+                console.log('Demo channel disconnected')
+              },
+              rejected: () => {
+                console.log('Demo channel rejected')
+              },
+              received: (data: any) => {
+                console.log('Demo channel receive', data)
+              },
+            })
+            ```
+            ```typescript
+            // 发送消息给服务端
+            this.channel.send({text: `发送给服务端的消息: ${prompt('输入要发送的消息')}`})
+            // 调用服务端方法
+            this.channel.perform('echo')
+            ```
+          </section>
+        </section>
+
+        <!-- 4 RTC -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ## RTC (Real-Time Communication)
+          </section>
+          <section data-markdown class="md_small">
+            ### WebRTC 是什么
+
+            - 2010 年 Google 开源的音视频处理+即时通讯的跨平台开源多媒体框架
+            - Google 提供的例子: https://appr.tc/
+
+          </section>
+          <section data-markdown class="md_small">
+            ### WebRTC 能做啥
+
+            - 音视频实时互动
+            - 游戏、即时通讯、文件传输
+            - 音视频处理, 回音消除、降噪 ...
+            - 音视频会议，照相机，音乐播放器，共享远程桌面，录制，即时通讯，P2P 网络加速，文件传输工具，游戏，实时人脸识别 ...
+
+          </section>
+          <section data-markdown class="md_small">
+            ### 为什么要用 WebRTC
+
+            - 自己实现音视频通信需要解决的问题
+              - 设备采集，设备兼容
+              - 连接协议
+              - 减少丢包
+              - 断网恢复
+              - 如何保障音视频质量
+              - 及时响应用户网络变化等
+
+              WebRTC 将这些技术都植入到浏览器中，之前这些解决方案都需要在 PC 和移动设备中安装相应的插件或应用程序，这些公司还会向开发者收取技术授权费，并构筑起巨大的技术壁垒防止新公司加入到这个领域中蚕食市场份额
+
+              WebRTC 则使每一位浏览器用户不再需要安装插件，开发者也不需要缴纳昂贵的授权费，大家只需要打开特定的网站就可立即与其他用户建立连接
+
+              且由于 Web 是开放的，移动端可通过 WebView，PC 原生应用可通过 electron，实现多端支持 WebRTC
+          </section>
+        </section>
+
+        <!-- 5 学习 WebRTC 需要了解的一些概念 -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ### 学习 WebRTC 需要了解的一些概念
+            - **摄像头**: 用于捕捉（采集）图像和视频
+            - **麦克风**: 用于采集音频数据。它与视频一样，可以指定一秒内采样的次数，称为**采样率**，每个采样用几个 bit 表示，称为采样位深或采样大小
+            - **帧率**: 摄像头一秒钟采集图像的次数称为帧率 (帧率越高，视频就越平滑流畅)
+                - 在直播系统中一般不会设置太高的帧率，因为帧率越高，占的网络带宽就越多
+            - **分辨率*8: 常见的分辨率有 2K、1080P、720P、420P 等 (分辨率越高图像就越清晰, 占用的带宽也就越多)
+                - 直播系统中一般分辨率会跟据你的网络带宽进行动态调整
+            - **宽高比**: 分辨率一般分为两种宽高比，即 16:9 或 4:3。4:3 的宽高比是从黑白电视而来，而 16:9 的宽高比是从显示器而来，现在一般情况下都采用 16:9 的比例
+            - **轨(Track)**: 在多媒体中表达的就是每条轨数据都是独立的，不会与其他轨相交，如 MP4 中的音频轨、视频轨，它们在 MP4 文件中是被分别存储的
+            - **流(Stream)**: 以理解为容器。在 WebRTC 中，"流" 可以分为媒体流（MediaStream）和数据流（DataStream）
+                - 媒体流可以存放 0 个或多个音频轨或视频轨，数据流可以存 0 个或多个数据轨
+          </section>
+          <section data-markdown class="md_small">
+            ### RTP
+            - TCP 可靠，但是慢，无法实现实时互动直播
+            - UDP 传输快，但不可靠 (不过实时互动必须使用 UDP 来实现)
+            - 一般实时互动直播使用，RTP 协议分片，使用 UDP 协议传输，使用 RTCP 保障传输质量
+              - 一般情况下，在实时互动直播系统传输音视频数据流时，并不直接将音视频数据流交给 UDP 传输，而是先给音视频数据加个 RTP 头，然后再交给 UDP 进行传输
+          </section>
+          <section data-markdown class="md_small">
+            ### RTCP
+            - 在使用 RTP 包传输数据时，难免会发生丢包、乱序、抖动等问题，下面我们来看一下使用的网络一般都会在什么情况下出现问题
+              - 网络线路质量问题引起丢包率高
+              - 传输的数据超过了带宽的负载引起的丢包问题
+              - 信号干扰（信号弱）引起的丢包问题
+              - 跨运营商引入的丢包问题
+              - ...
+
+            WebRTC 对这些问题在底层都有相应的处理策略，但在处理这些问题之前，它首先要让各端都知道它们自己的网络质量到底是怎样的，这就是 RTCP 的作用，RTCP 与 RTP 协议相辅相成，RTCP 会将 RTP 的丢包情况及时反馈给发送方
+          </section>
+          <section data-markdown class="md_small">
+            ### SDP (Session Description Protocal）[规范](https://datatracker.ietf.org/doc/html/rfc4566#page-24)
+            SDP: 指用文本描述的各端（PC 端、Mac 端、Android 端、iOS 端等）的能力(各端所支持的音频编解码器是什么，这些编解码器设定的参数是什么，使用的传输协议是什么，以及包括的音视频媒体是什么等等)
+
+            两个客户端/浏览器进行 1 对 1 通话时，首先要进行信令交互，而交互的一个重要信息就是 SDP 的交换
+
+            交换 SDP 的目的是为了让对方知道彼此具有哪些能力，然后根据双方各自的能力进行协商，协商出大家认可的音视频编解码器、编解码器相关的参数（如音频通道数，采样率等）、传输协议等信息
+
+            举个例子，A 与 B 进行通讯，它们先各自在 SDP 中记录自己支持的音频参数、视频参数、传输协议等信息，然后再将自己的 SDP 信息通过信令服务器发送给对方。当一方收到对端传来的 SDP 信息后，它会将接收到的 SDP 与自己的 SDP 进行比较，并取出它们之间的交集，这个交集就是它们协商的结果，也就是它们最终使用的音视频参数及传输协议了
+
+            WebRTC 对标准 SDP 规范做了一些调整
+          </section>
+          <section data-markdown class="md_small">
+            ### 媒体协商 1
+            媒体协商的就是让双方找到共同支持的媒体能力，如双方都支持的编解码器，从而最终实现彼此之间的音视频通信
+
+            1. 首先，通信双方将它们各自的媒体信息，如编解码器、媒体流的 SSRC、传输协议、IP 地址和端口等，按 SDP 格式整理好
+            2. 然后，通信双方通过信令服务器交换 SDP 信息，并待彼此拿到对方的 SDP 信息后，找出它们共同支持的媒体能力
+            3. 最后，双方按照协商好的媒体能力开始音视频通信
+
+            端到端之间的媒体协商，就是基于 RTCPeerConnection 对象实现的
+
+            在通讯双方都创建好 RTCPeerConnection 对象后，它们就可以开始进行媒体协商了
+          </section>
+          <section data-markdown class="md_small">
+            ### 媒体协商 2
+            对于 1 对 1 通信的双方来说，我们称首先发送媒体协商消息的一方为呼叫方，而另一方则为被呼叫方
+
+            Offer，在双方通讯时，呼叫方发送的 SDP 消息称为 Offer, Answer，在双方通讯时，被呼叫方发送的 SDP 消息称为 Answer
+
+            1. 首先，呼叫方创建 Offer 类型的 SDP 消息。创建完成后，调用 setLocalDescriptoin 方法将该 Offer 保存到本地 Local 域，然后通过信令将 Offer 发送给被呼叫方。
+            2. 被呼叫方收到 Offer 类型的 SDP 消息后，调用 setRemoteDescription 方法将 Offer 保存到它的 Remote 域。作为应答，被呼叫方要创建 Answer 类型的 SDP 消息，Answer 消息创建成功后，再调用 setLocalDescription 方法将 Answer 类型的 SDP 消息保存到本地的 Local 域。最后，被呼叫方将 Answer 消息通过信令发送给呼叫方。至此，被呼叫方的工作就完部完成了。
+            3. 接下来是呼叫方的收尾工作，呼叫方收到 Answer 类型的消息后，调用 RTCPeerConnecton 对象的 setRemoteDescription 方法，将 Answer 保存到它的 Remote 域。
+            4. 当通讯双方拿到彼此的 SDP 信息后，就可以进行媒体协商了。媒体协商的具体过程是在 WebRTC 内部实现的，我们就不去细讲了。你只需要记住本地的 SDP 和远端的 SDP 都设置好后，协商就算成功了
+          </section>
+          <section data-markdown class="md_small">
+            ### ICE Candidate
+            在媒体协商过程中，如果双方能达成一致，也就是商量好了使用什么编解码器，确认了使用什么传输协议，那么接下来，WebRTC 就要建立连接，开始传输音视频数据了, 当 WebRTC 通信双方彼此要进行连接时，每一端都会提供许多候选者，比如你的主机有两块网卡，那么每块网卡的不同端口都是一个候选者
+
+            在众多候选者中，host 类型的候选者优先级是最高的。在 WebRTC 中，首先对 host 类型的候选者进行连通性检测，如果它们之间可以互通，则直接建立连接。其实，host 类型之间的连通性检测就是内网之间的连通性检测。WebRTC 就是通过这种方式巧妙地解决了大家认为很困难的问题
+
+            同样的道理，如果 host 类型候选者之间无法建立连接，那么 WebRTC 则会尝试次优先级的候选者，即 srflx 类型的候选者。也就是尝试让通信双方直接通过 P2P 进行连接，如果连接成功就使用 P2P 传输数据；如果失败，就最后尝试使用 relay 方式建立连接
+
+            - 实际上，端对端的建立更主要的工作是 Candidate 的收集, WebRTC 将 Candidate 分为三种类型
+              - host 类型，即本机内网的 IP 和端口
+              - srflx 类型, 即本机 NAT 映射后的外网的 IP 和端口
+              - relay 类型，即中继服务器的 IP 和端口
+              - 其中，host 类型优先级最高，srflx 次之，relay 最低, 在本机收集所有的 host 类型的 Candidate，通过 STUN 协议收集 srflx 类型的 Candidate，使用 TURN 协议收集 relay 类型的 Candidate
+          </section>
+        </section>
+
+        <!-- 6 WebRTC 中比较重要的 API -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ### WebRTC 中比较重要的 API
+            - [getUserMedia/getDisplayMedia](https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia)
+            - [MediaRecorder](https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder)
+            - [RTCPeerConnection](https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection)
+              - createOffer 创建 Offer
+              - createAnswer 创建 Answer
+              - setLocalDescription 设置本地 SDP 信息
+              - setRemoteDescription 设置远端的 SDP 信息
+          </section>
+        </section>
+
+        <!-- 7 WebRTC Examples -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ### [WebRTC Examples](http://localhost:3000/demos)
+          </section>
+          <section data-markdown class="md_small">
+            ### [使用 WebRTC 采集客户端音视频](http://localhost:3000/demos/collect)
+            - 代码:
+              1. app/views/demos/collect.html.erb
+              2. app/frontend/controllers/democollect_controller.ts
+
+            ```typescript
+            // 获取系统的音视频设备 (摄像头，麦克风)
+            navigator.mediaDevices.enumerateDevices()
+              .then((deviceInfos) => {
+                deviceInfos.forEach((deviceInfo) => {...}) // 得到每一个设备的信息
+              }).catch((err) => {...})
+            ```
+            ```typescript
+            // 采集音视频流，会请求访问媒体设备，如是第一次访问，会向用户弹出提示窗口
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+              .then((mediaStream) => {
+                video.srcObject = mediaStream; // 获取到音视频数据(存放了采集到的音视频轨)，传递给 video
+              }).catch((error) => {
+                  // 如用户拒绝, 或要访问的媒体设备不可用
+                  console.log('navigator.getUserMedia error: ', error);
+              });
+            ```
+          </section>
+          <section data-markdown class="md_small">
+            ### [使用 WebRTC 进行客户端录制](http://localhost:3000/demos/record)
+            - 代码:
+              1. app/views/demos/record.html.erb
+              2. app/frontend/controllers/demorecord_controller.ts
+
+            ```typescript
+            this.buffer: Blob[] = []; // 保存录制的数据
+
+            // 创建录制对象
+            this.mediaRecorder = new MediaRecorder(this.stream, {mimeType: 'video/webm;codecs=vp8'})
+            this.mediaRecorder.ondataavailable = (e: any) => {
+              if (e && e.data && e.data.size > 0){
+                this.buffer.push(e.data)
+              }
+            }
+
+            // 开始录制
+            this.mediaRecorder.start(10)
+            ```
+            ```typescript
+            // 播放录制的视频
+            const blob = new Blob(this.buffer, {type: 'video/webm'})
+            video.src = window.URL.createObjectURL(blob)
+            video.play()
+            ```
+          </section>
+          <section data-markdown class="md_small">
+            ### [使用 WebRTC 共享桌面](http://localhost:3000/demos/desktop)
+            - 代码
+              - app/views/demos/desktop.html.erb
+              - app/frontend/controllers/demodesktop_controller.ts
+
+            ```typescript
+            // 注意采集桌面视频流时，audio 需要为 false
+            (navigator.mediaDevices as any).getDisplayMedia({
+              video: { width: 640, height: 480, frameRate: 15 },
+              audio: false
+            }).then(stream => {
+                this.stream = stream;
+                this._getVideoTarget().srcObject = stream
+              }).catch(err => {
+                console.log('getUserMedia error:', err)
+              })
+            ```
+          </section>
+          <section data-markdown class="md_small">
+            ### [使用 WebRTC 进行一对一音视频会话](http://localhost:3000/demos/peer)
+            - 代码
+              - app/views/demos/peer.html.erb
+              - app/frontend/controllers/demopeer_controller.ts
+
+            ```typescript
+            // 呼叫方
+            this.localPeerConnection = new RTCPeerConnection(null)
+            // 进行媒体协商
+            this.localPeerConnection.createOffer({ offerToReceiveVideo: true })
+              .then(this.createdOffer.bind(this)) // 回调中保存 sdp 信息
+            // 协商完成后会进行，ice 检测，进入该回调
+            this.localPeerConnection.addEventListener('icecandidate', (event: RTCPeerConnectionIceEvent) => {
+              const newIceCandidate = new RTCIceCandidate(iceCandidate);
+              const otherPeer = this.getOtherPeer(peerConnection);
+              // 将本地获到的 Candidate 添加到远端的 RTCPeerConnection 对象中
+              otherPeer.addIceCandidate(newIceCandidate)
+            })
+            // 推送本地音视频流到远端
+            this.localPeerConnection.addStream(this.localStream)
+            ```
+            ```typescript
+            // 被呼叫方
+            // 回应媒体协商
+            this.remotePeerConnection.createAnswer()
+              .then(this.createdAnswer.bind(this))  // 回调中保存 sdp 信息
+            // ice 检测通过后，会从该回调中接收到推送过来的数据
+            this.remotePeerConnection.addEventListener('addstream', this.gotRemoteMediaStream.bind(this))
+            ```
+          </section>
+        </section>
+
+        <!-- 7 结合 RTM & RTM 实现一对一音视频服务 -->
+        <section data-transition="zoom">
+          <section data-markdown class="md_small">
+            ### 结合 RTM & RTM 实现一对一音视频服务 [(例子)](http://localhost:3000/)
+
+            ![demo](images/classroom.jpg)
+          </section>
+        </section>
 
 				<section data-markdown class="md_small">
-				多谢 😘
+				  ### 谢谢 😘
 
-				- Away0x
+          - [Github](https://github.com/Away0x/learning-webrtc)
 				</section>
 
 			</div>
